@@ -1,0 +1,18 @@
+# Keep the Docker build context small and free of host build output.
+.git
+.idea
+**/.idea
+.claude
+.mcp.json
+CLAUDE.md
+
+# Local H2 database files created by the h2 profile
+data
+
+# Maven output (the image builds its own jar)
+**/target
+
+# Angular: dependencies and build output are recreated inside the image
+frontend/node_modules
+frontend/dist
+frontend/.angular
