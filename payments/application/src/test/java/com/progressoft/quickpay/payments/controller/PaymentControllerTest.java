@@ -14,6 +14,7 @@ import com.progressoft.quickpay.payments.repository.models.PaymentFilter;
 import com.progressoft.quickpay.payments.resources.paging.PagingOptions;
 import com.progressoft.quickpay.payments.resources.paging.PagingResult;
 import com.progressoft.quickpay.payments.security.SecurityConfig;
+import com.progressoft.quickpay.payments.security.TokenService;
 import com.progressoft.quickpay.payments.service.PaymentService;
 import com.progressoft.training.fileparser.exception.FileParserException;
 import org.junit.jupiter.api.Assertions;
@@ -41,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PaymentController.class)
-@Import({GlobalExceptionHandler.class, PaymentMapperImpl.class, SecurityConfig.class})
+@Import({GlobalExceptionHandler.class, PaymentMapperImpl.class, SecurityConfig.class, TokenService.class})
 @WithMockUser(roles = "PAYMENT")
 class PaymentControllerTest {
 

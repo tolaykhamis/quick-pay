@@ -8,6 +8,7 @@ import com.progressoft.quickpay.payments.resources.paging.PagingOptions;
 import com.progressoft.quickpay.payments.resources.paging.PagingResult;
 import com.progressoft.quickpay.payments.resources.template.TemplateRequest;
 import com.progressoft.quickpay.payments.security.SecurityConfig;
+import com.progressoft.quickpay.payments.security.TokenService;
 import com.progressoft.quickpay.payments.service.TemplateService;
 import com.progressoft.training.fileparser.domain.Template;
 import com.progressoft.training.fileparser.exception.DuplicateTemplateException;
@@ -29,7 +30,7 @@ import java.util.Optional;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest({TemplateController.class, SecurityConfig.class})
+@WebMvcTest({TemplateController.class, SecurityConfig.class, TokenService.class})
 @WithMockUser(roles = "TEMPLATE")
 class TemplateControllerTest {
 
