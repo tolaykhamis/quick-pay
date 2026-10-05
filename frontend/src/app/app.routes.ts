@@ -11,5 +11,8 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/home/home').then(m => m.Home),
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: '**',
+    loadComponent: () => import('./features/not-found/not-found').then(m => m.NotFound),
+  },
 ];
