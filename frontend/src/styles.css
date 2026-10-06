@@ -1,10 +1,13 @@
 :root {
   --color-text: #1f2933;
   --color-muted: #52606d;
+  --color-error: #b00020;
   --color-primary: #1d4ed8;
   --color-primary-hover: #1e40af;
   --color-on-primary: #ffffff;
   --color-surface: #ffffff;
+  --color-border: #7b8794;
+  --shadow-card: 0 0.25rem 1rem rgb(0 0 0 / 0.12);
   --color-backdrop: rgb(0 0 0 / 0.5);
   --space-1: 0.5rem;
   --space-2: 1rem;

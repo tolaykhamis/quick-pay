@@ -7,17 +7,7 @@ import {Auth} from '../../core/auth';
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-login',
-  styles: `
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      max-width: 20rem;
-    }
-    .error {
-      color: #b00020;
-    }
-  `,
+  styleUrl: './login.css',
   template: `
     <h2>Log in</h2>
     <form [formGroup]="form" (ngSubmit)="submit()">
@@ -31,7 +21,9 @@ import {Auth} from '../../core/auth';
         <p class="error" role="alert">{{ errorMessage() }}</p>
       }
 
-      <button type="submit" [disabled]="form.invalid || isSubmitting()">Log in</button>
+      <button type="submit" [disabled]="form.invalid || isSubmitting()">
+        {{ isSubmitting() ? 'Logging in...' : 'Log in' }}
+      </button>
     </form>
   `,
 })
