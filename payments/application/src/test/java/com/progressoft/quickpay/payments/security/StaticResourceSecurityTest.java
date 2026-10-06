@@ -20,14 +20,16 @@ class StaticResourceSecurityTest {
     private MockMvc mockMvc;
 
     @ParameterizedTest
-    @ValueSource(strings = {"/", "/index.html", "/favicon.ico", "/main.js", "/styles.css"})
+    @ValueSource(strings = {"/", "/index.html", "/favicon.ico", "/main.js", "/styles.css",
+            "/assets/logo.png", "/assets/fonts/inter.woff2"})
     void givenAngularStaticFile_whenGetWithoutToken_thenNotBlockedBySecurity(String path) throws Exception {
         mockMvc.perform(get(path))
                 .andExpect(status().isNotFound());
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"/secret.txt", "/api/payments", "/api/templates"})
+    @ValueSource(strings = {"/secret.txt", "/api/payments", "/api/templates",
+            "/v3/api-docs", "/swagger-ui.html"})
     void givenOtherPath_whenGetWithoutToken_thenReturn401(String path) throws Exception {
         mockMvc.perform(get(path))
                 .andExpect(status().isUnauthorized());

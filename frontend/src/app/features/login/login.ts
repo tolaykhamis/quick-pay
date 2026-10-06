@@ -1,4 +1,3 @@
-import {HttpErrorResponse} from '@angular/common/http';
 import {Component, inject, signal} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -8,24 +7,7 @@ import {Auth} from '../../core/auth';
   imports: [ReactiveFormsModule],
   selector: 'app-login',
   styleUrl: './login.css',
-  template: `
-    <h2>Log in</h2>
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <label for="username">Username</label>
-      <input id="username" formControlName="username" autocomplete="username" />
-
-      <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password" autocomplete="current-password" />
-
-      @if (errorMessage()) {
-        <p class="error" role="alert">{{ errorMessage() }}</p>
-      }
-
-      <button type="submit" [disabled]="form.invalid || isSubmitting()">
-        {{ isSubmitting() ? 'Logging in...' : 'Log in' }}
-      </button>
-    </form>
-  `,
+  templateUrl: './login.html',
 })
 export class Login {
   protected readonly errorMessage = signal('');
@@ -44,12 +26,9 @@ export class Login {
     this.isSubmitting.set(true);
 
     this.auth.login(username, password).subscribe({
-      next: () => this.router.navigate(['/']),
-      error: (error: HttpErrorResponse) => {
-        this.errorMessage.set(
-          error.status === 401 ? 'Wrong username or password.' : error.status === 0 ? 'Could not reach the server.'
-            : 'The server had a problem. Please try again.',
-        );
+      next: () => this.router.navigate(['/payments']),
+      error: (error: Error) => {
+        this.errorMessage.set(error.message);
         this.isSubmitting.set(false);
       },
     });

@@ -1,0 +1,43 @@
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: var(--space-2);
+}
+
+header {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+button {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-on-primary);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-on-primary);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--color-on-primary);
+  color: var(--color-primary);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-on-primary);
+  outline-offset: 2px;
+}

@@ -1,12 +1,15 @@
 :root {
-  --color-text: #1f2933;
-  --color-muted: #52606d;
+  --color-text: #1b2b24;
+  --color-muted: #4a5d54;
   --color-error: #b00020;
-  --color-primary: #1d4ed8;
-  --color-primary-hover: #1e40af;
+  --color-primary: #2f6b4f;
+  --color-primary-hover: #24533d;
   --color-on-primary: #ffffff;
+  --color-bg: #f4f7f5;
   --color-surface: #ffffff;
   --color-border: #7b8794;
+  --color-disabled-bg: #dfe5e2;
+  --container-width: 64rem;
   --shadow-card: 0 0.25rem 1rem rgb(0 0 0 / 0.12);
   --color-backdrop: rgb(0 0 0 / 0.5);
   --space-1: 0.5rem;
@@ -16,6 +19,9 @@
 }
 
 body {
-  font-family: system-ui, sans-serif;
+  margin: 0;
+  background: var(--color-bg);
   color: var(--color-text);
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
 }

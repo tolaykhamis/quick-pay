@@ -1,5 +1,6 @@
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { Auth } from './auth';
@@ -10,11 +11,14 @@ describe('Auth', () => {
   let http: HttpClient;
   let backend: HttpTestingController;
   let navigate: ReturnType<typeof vi.spyOn>;
+  const handleError = vi.fn();
 
   beforeEach(() => {
     localStorage.clear();
+    handleError.mockReset();
     TestBed.configureTestingModule({
       providers: [
+        { provide: ErrorHandler, useValue: { handleError } },
         provideRouter([]),
         provideHttpClient(withInterceptors([authInterceptor])),
         provideHttpClientTesting(),
@@ -135,6 +139,24 @@ describe('Auth', () => {
     expect(navigate).not.toHaveBeenCalled();
   });
 
+  it.each([
+    [401, 'Wrong username or password.'],
+    [0, 'Could not reach the server.'],
+    [500, 'The server had a problem. Please try again.'],
+  ])('fails the login with a readable message for status %i', (status, message) => {
+    let failure: Error | undefined;
+
+    auth.login('tolay', 'wrong').subscribe({ error: (error: Error) => (failure = error) });
+    const request = backend.expectOne('/api/auth/login');
+    if (status === 0) {
+      request.error(new ProgressEvent('error'));
+    } else {
+      request.flush(null, { status, statusText: 'Error' });
+    }
+
+    expect(failure?.message).toBe(message);
+  });
+
   it('tells the server on logout, then clears the tokens and goes to /login', () => {
     loginSuccessfully();
 
@@ -157,6 +179,16 @@ describe('Auth', () => {
     expect(auth.isLoggedIn()).toBe(false);
     expect(localStorage.getItem('refreshToken')).toBeNull();
     expect(navigate).toHaveBeenCalledWith(['/login']);
+  });
+
+  it('reports the failed logout call to the ErrorHandler instead of hiding it', () => {
+    loginSuccessfully();
+
+    auth.logout();
+    backend.expectOne('/api/auth/logout').flush(null, { status: 500, statusText: 'Server Error' });
+
+    expect(handleError).toHaveBeenCalledTimes(1);
+    expect(handleError.mock.calls[0][0].status).toBe(500);
   });
 
   it('refreshes first and then logs out on the server when the access token has expired', () => {
@@ -219,9 +251,10 @@ describe('Auth', () => {
 
     expect(auth.isLoggedIn()).toBe(false);
     expect(localStorage.getItem('refreshToken')).toBeNull();
+    expect(handleError).not.toHaveBeenCalled();
   });
 
-  it('keeps the stored refresh token at start-up when the server is failing', () => {
+  it('keeps the stored refresh token at start-up when the server is failing, and reports it', () => {
     localStorage.setItem('refreshToken', 'r1');
 
     auth.restoreSession().subscribe();
@@ -229,5 +262,6 @@ describe('Auth', () => {
 
     expect(auth.isLoggedIn()).toBe(false);
     expect(localStorage.getItem('refreshToken')).toBe('r1');
+    expect(handleError).toHaveBeenCalledTimes(1);
   });
 });

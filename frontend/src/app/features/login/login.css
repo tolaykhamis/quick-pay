@@ -1,7 +1,20 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12vh var(--space-2) var(--space-3);
+}
+
+.brand {
+  margin: 0 0 var(--space-2);
+  color: var(--color-primary);
+  font-size: 2rem;
+}
+
+.card {
+  box-sizing: border-box;
+  width: 100%;
   max-width: 22rem;
-  margin: var(--space-3) auto;
   padding: var(--space-3);
   border-radius: var(--radius);
   background: var(--color-surface);
@@ -9,11 +22,18 @@
 }
 
 h2 {
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--space-3);
+  font-size: 1.25rem;
   text-align: center;
 }
 
 form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
@@ -37,6 +57,8 @@ input:focus-visible {
 
 .error {
   margin: 0;
+  padding-left: var(--space-1);
+  border-left: 4px solid var(--color-error);
   color: var(--color-error);
 }
 
@@ -56,7 +78,8 @@ button:hover:not(:disabled) {
 }
 
 button:disabled {
-  opacity: 0.6;
+  background: var(--color-disabled-bg);
+  color: var(--color-muted);
   cursor: not-allowed;
 }
 

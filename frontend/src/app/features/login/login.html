@@ -1,0 +1,23 @@
+<h1 class="brand">QuickPay</h1>
+<div class="card">
+  <h2>Sign in to QuickPay</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="field">
+      <label for="username">Username</label>
+      <input id="username" formControlName="username" autocomplete="username" />
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" formControlName="password" autocomplete="current-password" />
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error" role="alert">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="form.invalid || isSubmitting()">
+      {{ isSubmitting() ? 'Logging in...' : 'Log in' }}
+    </button>
+  </form>
+</div>

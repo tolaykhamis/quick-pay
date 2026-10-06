@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
@@ -50,17 +49,22 @@ describe('Login', () => {
     expect(button.disabled).toBe(false);
   });
 
-  it('logs in with the typed values and goes to the home page', async () => {
+  it('shows the brand and the "Sign in to QuickPay" title', () => {
+    expect(root().querySelector('.brand')!.textContent).toBe('QuickPay');
+    expect(root().querySelector('h2')!.textContent).toBe('Sign in to QuickPay');
+  });
+
+  it('logs in with the typed values and goes to the payments page', async () => {
     login.mockReturnValue(of({ accessToken: 'a', refreshToken: 'r' }));
 
     await fillAndSubmit('tolay', '12345');
 
     expect(login).toHaveBeenCalledWith('tolay', '12345');
-    expect(navigate).toHaveBeenCalledWith(['/']);
+    expect(navigate).toHaveBeenCalledWith(['/payments']);
   });
 
-  it('shows "Wrong username or password." on a 401', async () => {
-    login.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
+  it('shows the message the service fails with and stays on the page', async () => {
+    login.mockReturnValue(throwError(() => new Error('Wrong username or password.')));
 
     await fillAndSubmit('tolay', 'bad');
 
@@ -68,21 +72,11 @@ describe('Login', () => {
     expect(navigate).not.toHaveBeenCalled();
   });
 
-  it('shows "Could not reach the server." when there is no response (status 0)', async () => {
-    login.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 0 })));
+  it('enables the button again after a failed login', async () => {
+    login.mockReturnValue(throwError(() => new Error('Could not reach the server.')));
 
     await fillAndSubmit('tolay', '12345');
 
-    expect(root().querySelector('[role="alert"]')!.textContent).toBe('Could not reach the server.');
-  });
-
-  it('shows a "server had a problem" message on any other failure', async () => {
-    login.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 500 })));
-
-    await fillAndSubmit('tolay', '12345');
-
-    expect(root().querySelector('[role="alert"]')!.textContent).toBe(
-      'The server had a problem. Please try again.',
-    );
+    expect(root().querySelector('button')!.disabled).toBe(false);
   });
 });

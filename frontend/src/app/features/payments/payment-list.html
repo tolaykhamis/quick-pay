@@ -1,0 +1,48 @@
+<h2>Payments</h2>
+
+@if (isLoading()) {
+  <p>Loading payments...</p>
+} @else if (errorMessage()) {
+  <p class="error" role="alert">{{ errorMessage() }}</p>
+} @else if (page(); as result) {
+  @if (result.content.length === 0) {
+    <p>No payments yet.</p>
+  } @else {
+    <p class="summary">
+      Showing {{ result.content.length }} of {{ result.totalElements }} payments
+    </p>
+    <div class="table-wrapper">
+      <table>
+        <caption class="visually-hidden">
+          Payments, first page
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Created</th>
+            <th scope="col">Sender</th>
+            <th scope="col">Receiver</th>
+            <th scope="col">Creditor</th>
+            <th scope="col" class="number">Amount</th>
+            <th scope="col">Status</th>
+            <th scope="col">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (payment of result.content; track payment.id) {
+            <tr>
+              <td>{{ payment.id }}</td>
+              <td>{{ payment.createdAt | date: 'medium' }}</td>
+              <td>{{ payment.senderAccount }}</td>
+              <td>{{ payment.receiverAccount }}</td>
+              <td>{{ payment.creditorName }}</td>
+              <td class="number">{{ payment.amount }} {{ payment.currency }}</td>
+              <td>{{ payment.status }}</td>
+              <td>{{ payment.notes }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+}
