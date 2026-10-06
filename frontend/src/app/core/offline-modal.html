@@ -1,0 +1,17 @@
+@if (isOffline()) {
+  <div class="backdrop">
+    <div
+      class="modal"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="offline-title"
+      aria-describedby="offline-text"
+    >
+      <h2 id="offline-title">No internet connection</h2>
+      <p id="offline-text">We could not reach the server. Check your connection and try again.</p>
+      <button type="button" [disabled]="isRetrying()" (click)="tryAgain()">
+        {{ isRetrying() ? 'Checking...' : 'Try again' }}
+      </button>
+    </div>
+  </div>
+}

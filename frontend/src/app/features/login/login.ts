@@ -1,8 +1,8 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Auth } from '../../core/auth';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Component, inject, signal} from '@angular/core';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {Auth} from '../../core/auth';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -36,19 +36,18 @@ import { Auth } from '../../core/auth';
   `,
 })
 export class Login {
+  protected readonly errorMessage = signal('');
+  protected readonly isSubmitting = signal(false);
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
   private readonly formBuilder = inject(FormBuilder);
-
   protected readonly form = this.formBuilder.nonNullable.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
   });
-  protected readonly errorMessage = signal('');
-  protected readonly isSubmitting = signal(false);
 
   protected submit(): void {
-    const { username, password } = this.form.getRawValue();
+    const {username, password} = this.form.getRawValue();
     this.errorMessage.set('');
     this.isSubmitting.set(true);
 
@@ -56,7 +55,8 @@ export class Login {
       next: () => this.router.navigate(['/']),
       error: (error: HttpErrorResponse) => {
         this.errorMessage.set(
-          error.status === 401 ? 'Wrong username or password.' : 'Could not reach the server.',
+          error.status === 401 ? 'Wrong username or password.' : error.status === 0 ? 'Could not reach the server.'
+            : 'The server had a problem. Please try again.',
         );
         this.isSubmitting.set(false);
       },

@@ -4,6 +4,8 @@
   --color-primary: #1d4ed8;
   --color-primary-hover: #1e40af;
   --color-on-primary: #ffffff;
+  --color-surface: #ffffff;
+  --color-backdrop: rgb(0 0 0 / 0.5);
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 2rem;
