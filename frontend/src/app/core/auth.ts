@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Service, computed, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable, catchError, finalize, of, shareReplay, tap } from 'rxjs';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {computed, ErrorHandler, inject, Service, signal} from '@angular/core';
+import {Router} from '@angular/router';
+import {catchError, finalize, Observable, of, shareReplay, tap} from 'rxjs';
 
 interface TokenResponse {
   accessToken: string;
@@ -15,9 +15,9 @@ export class Auth {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   private readonly accessToken = signal<string | null>(null);
-  private refreshInFlight: Observable<TokenResponse> | null = null;
-
   readonly isLoggedIn = computed(() => this.accessToken() !== null);
+  private refreshInFlight: Observable<TokenResponse> | null = null;
+  private readonly errorHandler = inject(ErrorHandler);
 
   getAccessToken(): string | null {
     return this.accessToken();
@@ -25,7 +25,7 @@ export class Auth {
 
   login(username: string, password: string): Observable<TokenResponse> {
     return this.http
-      .post<TokenResponse>('/api/auth/login', { username, password })
+      .post<TokenResponse>('/api/auth/login', {username, password})
       .pipe(tap(response => this.saveTokens(response)));
   }
 
@@ -33,7 +33,7 @@ export class Auth {
     if (!this.refreshInFlight) {
       const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
       this.refreshInFlight = this.http
-        .post<TokenResponse>('/api/auth/refresh', { refreshToken })
+        .post<TokenResponse>('/api/auth/refresh', {refreshToken})
         .pipe(
           tap(response => this.saveTokens(response)),
           finalize(() => (this.refreshInFlight = null)),
@@ -65,7 +65,7 @@ export class Auth {
     this.http
       .post('/api/auth/logout', null)
       .pipe(finalize(() => this.endSession()))
-      .subscribe({ error: () => undefined });
+      .subscribe({error: error => this.errorHandler.handleError(error)});
   }
 
   endSession(): void {
