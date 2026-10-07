@@ -19,3 +19,24 @@ export interface PagedResult<T> {
   totalElements: number;
   totalPages: number;
 }
+
+export interface PaymentRequest {
+  senderAccount: string;
+  receiverAccount: string;
+  amount: number;
+  currency: string;
+  notes: string;
+  creditorName: string;
+}
+
+export interface BulkFailure {
+  rowNumber: number;
+  errors: string[];
+}
+
+export interface BulkUploadResult {
+  failures: BulkFailure[];
+  validRows: PaymentResponse[];
+  successCount: number;
+  failureCount: number;
+}

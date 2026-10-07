@@ -1,6 +1,6 @@
-import {HttpClient, HttpContext, HttpContextToken, HttpErrorResponse} from '@angular/common/http';
-import {inject, Service, signal} from '@angular/core';
-import {finalize, timeout} from 'rxjs';
+import { HttpClient, HttpContext, HttpContextToken, HttpErrorResponse } from '@angular/common/http';
+import { inject, Service, signal } from '@angular/core';
+import { finalize, timeout } from 'rxjs';
 
 export const SKIP_NETWORK_ERROR_HANDLING = new HttpContextToken<boolean>(() => false);
 
@@ -22,10 +22,13 @@ export class Connectivity {
 
     this.http
       .get('/api/payments', {
-        params: {pageSize: 1},
+        params: { pageSize: 1 },
         context: new HttpContext().set(SKIP_NETWORK_ERROR_HANDLING, true),
       })
-      .pipe(timeout(5000), finalize(() => this.retrying.set(false)))
+      .pipe(
+        timeout(5000),
+        finalize(() => this.retrying.set(false)),
+      )
       .subscribe({
         next: () => this.offline.set(false),
         error: (e: unknown) => {

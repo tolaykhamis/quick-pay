@@ -1,7 +1,7 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {computed, ErrorHandler, inject, Service, signal} from '@angular/core';
-import {Router} from '@angular/router';
-import {catchError, finalize, Observable, of, shareReplay, tap, throwError, timeout} from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { computed, ErrorHandler, inject, Service, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, finalize, Observable, of, shareReplay, tap, throwError, timeout } from 'rxjs';
 
 interface TokenResponse {
   accessToken: string;
@@ -34,9 +34,11 @@ export class Auth {
   }
 
   login(username: string, password: string): Observable<TokenResponse> {
-    return this.http.post<TokenResponse>('/api/auth/login', {username, password}).pipe(
-      tap(response => this.saveTokens(response)),
-      catchError((error: HttpErrorResponse) => throwError(() => new Error(loginErrorMessage(error)))),
+    return this.http.post<TokenResponse>('/api/auth/login', { username, password }).pipe(
+      tap((response) => this.saveTokens(response)),
+      catchError((error: HttpErrorResponse) =>
+        throwError(() => new Error(loginErrorMessage(error))),
+      ),
     );
   }
 
@@ -44,9 +46,9 @@ export class Auth {
     if (!this.refreshInFlight) {
       const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
       this.refreshInFlight = this.http
-        .post<TokenResponse>('/api/auth/refresh', {refreshToken})
+        .post<TokenResponse>('/api/auth/refresh', { refreshToken })
         .pipe(
-          tap(response => this.saveTokens(response)),
+          tap((response) => this.saveTokens(response)),
           finalize(() => (this.refreshInFlight = null)),
           shareReplay(1),
         );
@@ -79,7 +81,7 @@ export class Auth {
     this.http
       .post('/api/auth/logout', null)
       .pipe(finalize(() => this.endSession()))
-      .subscribe({error: error => this.errorHandler.handleError(error)});
+      .subscribe({ error: (error) => this.errorHandler.handleError(error) });
   }
 
   endSession(): void {

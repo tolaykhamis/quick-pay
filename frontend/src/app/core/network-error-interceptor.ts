@@ -1,7 +1,7 @@
-import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
-import {inject} from '@angular/core';
-import {catchError, throwError} from 'rxjs';
-import {Connectivity, SKIP_NETWORK_ERROR_HANDLING} from './connectivity';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
+import { Connectivity, SKIP_NETWORK_ERROR_HANDLING } from './connectivity';
 
 export const networkErrorInterceptor: HttpInterceptorFn = (request, next) => {
   const connectivity = inject(Connectivity);

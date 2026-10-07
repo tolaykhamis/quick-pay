@@ -1,12 +1,37 @@
-<header>
+<header class="topbar">
   <div class="container bar">
     <span class="brand">QuickPay</span>
     @if (isLoggedIn()) {
-      <button type="button" (click)="logout()">Log out</button>
+      <nav class="nav" aria-label="Main">
+        <a
+          routerLink="/payments"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >Payments</a
+        >
+        <a
+          routerLink="/payments/new"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >New payment</a
+        >
+        <a
+          routerLink="/payments/bulk"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          >Bulk upload</a
+        >
+      </nav>
+      <div class="user">
+        <button type="button" class="logout" (click)="logout()">
+          <span class="icon icon-logout" aria-hidden="true"></span>
+          Log out
+        </button>
+      </div>
     }
   </div>
 </header>
 
-<main class="container">
+<main class="container content">
   <router-outlet />
 </main>

@@ -1,7 +1,7 @@
-import {Component, inject, signal} from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {Auth} from '../../core/auth';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Auth } from '../../core/auth';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -21,7 +21,7 @@ export class Login {
   });
 
   protected submit(): void {
-    const {username, password} = this.form.getRawValue();
+    const { username, password } = this.form.getRawValue();
     this.errorMessage.set('');
     this.isSubmitting.set(true);
 

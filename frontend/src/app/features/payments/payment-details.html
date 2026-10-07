@@ -1,0 +1,39 @@
+<section class="page">
+  <div class="page-head">
+    <div class="page-title-row">
+      <h2 class="page-title">Payment details</h2>
+      @if (payment(); as item) {
+        <span class="pill" [attr.data-status]="item.status">{{ item.status }}</span>
+      }
+    </div>
+    <a class="btn" routerLink="/payments">Back to list</a>
+  </div>
+
+  @if (isLoading()) {
+    <p class="state state-loading">Loading payment...</p>
+  } @else if (errorMessage()) {
+    <p class="alert alert-error" role="alert">{{ errorMessage() }}</p>
+  } @else if (payment(); as item) {
+    <div class="panel">
+      <h3 class="section-title">Payment information</h3>
+      <dl class="details">
+        <dt>ID</dt>
+        <dd>{{ item.id }}</dd>
+        <dt>Created</dt>
+        <dd>{{ item.createdAt | date: 'medium' }}</dd>
+        <dt>Sender account</dt>
+        <dd>{{ item.senderAccount }}</dd>
+        <dt>Receiver account</dt>
+        <dd>{{ item.receiverAccount }}</dd>
+        <dt>Creditor name</dt>
+        <dd>{{ item.creditorName }}</dd>
+        <dt>Amount</dt>
+        <dd class="amount">
+          {{ item.amount }} <span class="cur">{{ item.currency }}</span>
+        </dd>
+        <dt>Notes</dt>
+        <dd>{{ item.notes || 'None' }}</dd>
+      </dl>
+    </div>
+  }
+</section>

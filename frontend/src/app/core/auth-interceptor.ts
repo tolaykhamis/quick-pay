@@ -1,10 +1,10 @@
-import {HttpErrorResponse, HttpInterceptorFn, HttpRequest} from '@angular/common/http';
-import {inject} from '@angular/core';
-import {catchError, switchMap, throwError} from 'rxjs';
-import {Auth} from './auth';
+import { HttpErrorResponse, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, switchMap, throwError } from 'rxjs';
+import { Auth } from './auth';
 
 function withBearer(request: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
-  return request.clone({setHeaders: {Authorization: `Bearer ${token}`}});
+  return request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
 }
 
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
@@ -31,7 +31,7 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
           }
           return throwError(() => refreshError);
         }),
-        switchMap(response => next(withBearer(request, response.accessToken))),
+        switchMap((response) => next(withBearer(request, response.accessToken))),
       );
     }),
   );

@@ -88,7 +88,7 @@ describe('Auth', () => {
     loginSuccessfully();
     let result: unknown;
 
-    http.get('/api/payments').subscribe(response => (result = response));
+    http.get('/api/payments').subscribe((response) => (result = response));
     backend.expectOne('/api/payments').flush(null, unauthorized());
 
     const refreshRequest = backend.expectOne('/api/auth/refresh');

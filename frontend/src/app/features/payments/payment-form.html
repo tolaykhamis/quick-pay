@@ -1,0 +1,121 @@
+<section class="page">
+  <div class="page-head">
+    <div class="page-heading">
+      <h2 class="page-title">Create payment</h2>
+      <p class="page-subtitle">Fill in every field except notes.</p>
+    </div>
+    <a class="btn" routerLink="/payments">Back to list</a>
+  </div>
+
+  <form class="panel form" [formGroup]="form" (ngSubmit)="submit()">
+    <h3 class="section-title">Payment information</h3>
+    <div class="form-grid">
+      <div class="form-row">
+        <label for="senderAccount">Sender account</label>
+        <input
+          class="input"
+          id="senderAccount"
+          formControlName="senderAccount"
+          autocomplete="off"
+          [attr.aria-invalid]="!!errorOf('senderAccount')"
+          aria-describedby="senderAccount-error"
+        />
+        @if (errorOf('senderAccount')) {
+          <p class="field-error" id="senderAccount-error" role="alert">
+            {{ errorOf('senderAccount') }}
+          </p>
+        }
+      </div>
+
+      <div class="form-row">
+        <label for="receiverAccount">Receiver account</label>
+        <input
+          class="input"
+          id="receiverAccount"
+          formControlName="receiverAccount"
+          autocomplete="off"
+          [attr.aria-invalid]="!!errorOf('receiverAccount')"
+          aria-describedby="receiverAccount-error"
+        />
+        @if (errorOf('receiverAccount')) {
+          <p class="field-error" id="receiverAccount-error" role="alert">
+            {{ errorOf('receiverAccount') }}
+          </p>
+        }
+      </div>
+
+      <div class="form-row">
+        <label for="amount">Amount</label>
+        <input
+          class="input"
+          id="amount"
+          formControlName="amount"
+          inputmode="decimal"
+          autocomplete="off"
+          [attr.aria-invalid]="!!errorOf('amount')"
+          aria-describedby="amount-error"
+        />
+        @if (errorOf('amount')) {
+          <p class="field-error" id="amount-error" role="alert">{{ errorOf('amount') }}</p>
+        }
+      </div>
+
+      <div class="form-row">
+        <label for="currency">Currency</label>
+        <input
+          class="input"
+          id="currency"
+          formControlName="currency"
+          autocomplete="off"
+          [attr.aria-invalid]="!!errorOf('currency')"
+          aria-describedby="currency-error"
+        />
+        @if (errorOf('currency')) {
+          <p class="field-error" id="currency-error" role="alert">{{ errorOf('currency') }}</p>
+        }
+      </div>
+
+      <div class="form-row span-2">
+        <label for="creditorName">Creditor name</label>
+        <input
+          class="input"
+          id="creditorName"
+          formControlName="creditorName"
+          autocomplete="off"
+          [attr.aria-invalid]="!!errorOf('creditorName')"
+          aria-describedby="creditorName-error"
+        />
+        @if (errorOf('creditorName')) {
+          <p class="field-error" id="creditorName-error" role="alert">
+            {{ errorOf('creditorName') }}
+          </p>
+        }
+      </div>
+
+      <div class="form-row span-2">
+        <label for="notes">Notes (optional)</label>
+        <textarea
+          class="input"
+          id="notes"
+          formControlName="notes"
+          rows="3"
+          [attr.aria-invalid]="!!errorOf('notes')"
+          aria-describedby="notes-error"
+        ></textarea>
+        @if (errorOf('notes')) {
+          <p class="field-error" id="notes-error" role="alert">{{ errorOf('notes') }}</p>
+        }
+      </div>
+    </div>
+
+    @if (formError()) {
+      <p class="form-error alert alert-error" role="alert">{{ formError() }}</p>
+    }
+
+    <div class="form-footer">
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isSubmitting()">
+        {{ isSubmitting() ? 'Creating...' : 'Create payment' }}
+      </button>
+    </div>
+  </form>
+</section>

@@ -1,48 +1,96 @@
-<h2>Payments</h2>
-
-@if (isLoading()) {
-  <p>Loading payments...</p>
-} @else if (errorMessage()) {
-  <p class="error" role="alert">{{ errorMessage() }}</p>
-} @else if (page(); as result) {
-  @if (result.content.length === 0) {
-    <p>No payments yet.</p>
-  } @else {
-    <p class="summary">
-      Showing {{ result.content.length }} of {{ result.totalElements }} payments
-    </p>
-    <div class="table-wrapper">
-      <table>
-        <caption class="visually-hidden">
-          Payments, first page
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Created</th>
-            <th scope="col">Sender</th>
-            <th scope="col">Receiver</th>
-            <th scope="col">Creditor</th>
-            <th scope="col" class="number">Amount</th>
-            <th scope="col">Status</th>
-            <th scope="col">Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (payment of result.content; track payment.id) {
-            <tr>
-              <td>{{ payment.id }}</td>
-              <td>{{ payment.createdAt | date: 'medium' }}</td>
-              <td>{{ payment.senderAccount }}</td>
-              <td>{{ payment.receiverAccount }}</td>
-              <td>{{ payment.creditorName }}</td>
-              <td class="number">{{ payment.amount }} {{ payment.currency }}</td>
-              <td>{{ payment.status }}</td>
-              <td>{{ payment.notes }}</td>
-            </tr>
-          }
-        </tbody>
-      </table>
+<section class="page">
+  <div class="page-head">
+    <div class="page-heading">
+      <h2 class="page-title">Payments</h2>
+      <p class="page-subtitle">Browse payments and open one for details.</p>
     </div>
+    <div class="actions">
+      <a class="btn btn-primary" routerLink="/payments/new">Create payment</a>
+      <a class="btn" routerLink="/payments/bulk">Bulk upload</a>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <p class="state state-loading">Loading payments...</p>
+  } @else if (errorMessage()) {
+    <p class="alert alert-error" role="alert">{{ errorMessage() }}</p>
+  } @else if (page(); as result) {
+    @if (result.content.length === 0) {
+      <p class="state state-empty">No payments</p>
+    } @else {
+      <div class="panel panel-flush">
+        <div class="table-wrap">
+          <table class="table table-wide">
+            <caption class="visually-hidden">
+              Payments
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Created</th>
+                <th scope="col">Sender</th>
+                <th scope="col">Receiver</th>
+                <th scope="col">Creditor</th>
+                <th scope="col" class="num">Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (payment of result.content; track payment.id) {
+                <tr class="row-link" (click)="open(payment.id)">
+                  <td>
+                    <a
+                      [routerLink]="['/payments', payment.id]"
+                      (click)="$event.stopPropagation()"
+                      >{{ payment.id }}</a
+                    >
+                  </td>
+                  <td>{{ payment.createdAt | date: 'medium' }}</td>
+                  <td>{{ payment.senderAccount }}</td>
+                  <td>{{ payment.receiverAccount }}</td>
+                  <td>{{ payment.creditorName }}</td>
+                  <td class="num">
+                    {{ payment.amount }} <span class="cur">{{ payment.currency }}</span>
+                  </td>
+                  <td>
+                    <span class="pill" [attr.data-status]="payment.status">{{
+                      payment.status
+                    }}</span>
+                  </td>
+                  <td>{{ payment.notes }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <p class="summary">
+            Showing {{ result.content.length }} of {{ result.totalElements }} payments
+          </p>
+          <nav class="pager" aria-label="Pagination">
+            <button
+              type="button"
+              class="btn"
+              [disabled]="result.pageNumber === 0"
+              (click)="goToPage(result.pageNumber - 1)"
+            >
+              Previous
+            </button>
+            <span class="page-indicator" aria-live="polite"
+              >Page {{ result.pageNumber + 1 }} of {{ result.totalPages }}</span
+            >
+            <button
+              type="button"
+              class="btn"
+              [disabled]="result.pageNumber + 1 >= result.totalPages"
+              (click)="goToPage(result.pageNumber + 1)"
+            >
+              Next
+            </button>
+          </nav>
+        </div>
+      </div>
+    }
   }
-}
+</section>

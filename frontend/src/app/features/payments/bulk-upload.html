@@ -1,0 +1,77 @@
+<section class="page">
+  <div class="page-head">
+    <div class="page-heading">
+      <h2 class="page-title">Bulk upload</h2>
+      <p class="page-subtitle">Upload a file to check and create many payments at once.</p>
+    </div>
+    <a class="btn" routerLink="/payments">Back to list</a>
+  </div>
+
+  <form class="panel upload" (submit)="$event.preventDefault(); upload()">
+    <h3 class="section-title">Upload a file</h3>
+    <div class="form-row">
+      <label for="file">Payments file</label>
+      <input id="file" class="file-input" type="file" (change)="chooseFile($event)" />
+    </div>
+    <div class="form-footer">
+      <button type="submit" class="btn btn-primary" [disabled]="!file() || isUploading()">
+        {{ isUploading() ? 'Uploading...' : 'Upload' }}
+      </button>
+    </div>
+  </form>
+
+  @if (errorMessage()) {
+    <p class="alert alert-error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  @if (result(); as outcome) {
+    <section class="page" aria-label="Upload result">
+      <h3 class="section-title">Result</h3>
+      <div class="counts">
+        <p class="stat success">
+          <strong>{{ outcome.successCount }}</strong> successful rows
+        </p>
+        <p class="stat" [class.failed]="outcome.failureCount > 0">
+          <strong>{{ outcome.failureCount }}</strong> failed rows
+        </p>
+      </div>
+
+      @if (outcome.failureCount === 0) {
+        <p class="alert alert-success" role="status">Every row in the file is valid.</p>
+      } @else {
+        <div class="panel panel-flush">
+          <div class="panel-head">
+            <h3 class="section-title">Failed rows</h3>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <caption class="visually-hidden">
+                Failed rows
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col" class="row-number">Row</th>
+                  <th scope="col">Errors</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (failure of outcome.failures; track failure.rowNumber) {
+                  <tr>
+                    <td class="row-number">{{ failure.rowNumber }}</td>
+                    <td>
+                      <ul>
+                        @for (message of failure.errors; track $index) {
+                          <li>{{ message }}</li>
+                        }
+                      </ul>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+    </section>
+  }
+</section>

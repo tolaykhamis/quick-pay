@@ -1,0 +1,125 @@
+.upload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.file-input {
+  width: 100%;
+  padding: var(--space-xl) var(--space-lg);
+  border: 2px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-alt);
+  color: var(--color-muted);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition);
+}
+
+.file-input:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.file-input:focus-visible {
+  border-color: var(--color-primary);
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.file-input::file-selector-button {
+  margin-right: var(--space-md);
+  padding: 0.625rem var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition);
+}
+
+.file-input::file-selector-button:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.counts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+.stat {
+  margin: 0;
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.stat strong {
+  display: block;
+  color: var(--color-text);
+  font-size: var(--text-2xl);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.stat.success {
+  border-color: color-mix(in srgb, var(--color-success) 35%, white);
+  background: var(--color-success-soft);
+  color: var(--color-success-ink);
+}
+
+.stat.success strong {
+  color: var(--color-success-ink);
+}
+
+.stat.failed {
+  border-color: color-mix(in srgb, var(--color-error) 35%, white);
+  background: var(--color-error-soft);
+  color: var(--color-error-ink);
+}
+
+.stat.failed strong {
+  color: var(--color-error-ink);
+}
+
+.panel-head {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.row-number {
+  width: 1%;
+  white-space: nowrap;
+}
+
+ul {
+  margin: 0;
+  padding-left: var(--space-md);
+}
+
+@media (max-width: 40rem) {
+  .counts {
+    grid-template-columns: 1fr;
+  }
+
+  .form-footer .btn {
+    width: 100%;
+  }
+}

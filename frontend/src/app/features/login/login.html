@@ -1,22 +1,29 @@
 <h1 class="brand">QuickPay</h1>
-<div class="card">
+<div class="panel auth-card">
   <h2>Sign in to QuickPay</h2>
+  <p class="muted">Enter your username and password to continue.</p>
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <div class="field">
+    <div class="form-row">
       <label for="username">Username</label>
-      <input id="username" formControlName="username" autocomplete="username" />
+      <input id="username" class="input" formControlName="username" autocomplete="username" />
     </div>
 
-    <div class="field">
+    <div class="form-row">
       <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password" autocomplete="current-password" />
+      <input
+        id="password"
+        class="input"
+        type="password"
+        formControlName="password"
+        autocomplete="current-password"
+      />
     </div>
 
     @if (errorMessage()) {
-      <p class="error" role="alert">{{ errorMessage() }}</p>
+      <p class="alert alert-error" role="alert">{{ errorMessage() }}</p>
     }
 
-    <button type="submit" [disabled]="form.invalid || isSubmitting()">
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid || isSubmitting()">
       {{ isSubmitting() ? 'Logging in...' : 'Log in' }}
     </button>
   </form>

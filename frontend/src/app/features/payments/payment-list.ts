@@ -1,42 +1,45 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { messageFor } from '../../core/api-error';
 import { PagedResult, PaymentResponse } from './models';
 import { PaymentApi } from './payment-api';
 
 @Component({
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink],
   selector: 'app-payment-list',
   styleUrl: './payment-list.css',
   templateUrl: './payment-list.html',
 })
 export class PaymentList implements OnInit {
   private readonly paymentApi = inject(PaymentApi);
+  private readonly router = inject(Router);
 
   protected readonly page = signal<PagedResult<PaymentResponse> | null>(null);
   protected readonly errorMessage = signal('');
   protected readonly isLoading = signal(true);
 
   ngOnInit(): void {
-    this.paymentApi.list().subscribe({
+    this.goToPage(0);
+  }
+
+  protected goToPage(pageNumber: number): void {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+    this.paymentApi.list(pageNumber).subscribe({
       next: (result) => {
         this.page.set(result);
         this.isLoading.set(false);
       },
       error: (error: HttpErrorResponse) => {
-        this.errorMessage.set(this.messageFor(error));
+        this.errorMessage.set(messageFor(error));
         this.isLoading.set(false);
       },
     });
   }
 
-  private messageFor(error: HttpErrorResponse): string {
-    if (error.status === 403) {
-      return 'You do not have permission to view payments.';
-    }
-    if (error.status === 0) {
-      return 'Could not reach the server.';
-    }
-    return 'Could not load payments. Please try again.';
+  protected open(id: number): void {
+    this.router.navigate(['/payments', id]);
   }
 }

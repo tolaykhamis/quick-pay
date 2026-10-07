@@ -107,8 +107,10 @@ Angular Material, raise it then.
 
 - Component styles live with the component and are scoped by default (Angular's emulated encapsulation). Do not turn
   encapsulation off, and avoid `::ng-deep`.
-- `src/styles.css` holds only global things: custom properties on `:root` (colors, spacing, font sizes), a minimal reset
-  and base typography. No feature styles.
+- `src/styles.css` holds global things: custom properties on `:root` (colors, spacing, font sizes), a minimal reset
+  and base typography, and the shared opt-in classes several pages reuse (`.btn`, `.table`, `.panel`, `.message`,
+  `.badge`, `.form-row`, `.input`, `.page`, `.page-head`). They are class-only, so nothing restyles an element that
+  did not ask for it. Page-specific styles stay in the component's own `.css` file.
 - Colors and spacing come from those custom properties. Do not hard-code a hex color in a component. (The login page's
   `#b00020` predates this rule. Move it into a token when that file is next touched.)
 - Class names are short kebab-case words describing the role (`.error`, `.form-row`). Scoping means no BEM is needed.
